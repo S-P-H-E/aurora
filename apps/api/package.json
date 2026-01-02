@@ -1,0 +1,19 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "tsx watch index.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^25.0.3",
+    "dotenv": "^17.2.3",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@elysiajs/node": "^1.4.2",
+    "@sinclair/typebox": "^0.34.46",
+    "elysia": "^1.4.19",
+    "openapi-types": "^12.1.3"
+  }
+}

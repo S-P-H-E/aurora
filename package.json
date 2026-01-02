@@ -1,0 +1,15 @@
+{
+  "name": "aura-crystals",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.27.0",
+  "devDependencies": {
+    "@types/node": "^25.0.3",
+    "turbo": "^2.7.2",
+    "typescript": "^5.9.3"
+  }
+}

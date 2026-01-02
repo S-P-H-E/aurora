@@ -1,0 +1,12 @@
+{
+  "name": "@lib/eden",
+  "version": "1.0.0",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "dependencies": {
+    "@elysiajs/eden": "^1.1.5"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}

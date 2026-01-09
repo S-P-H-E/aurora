@@ -50,8 +50,6 @@ export async function getProducts() {
     const res = await shopifyFetch({
       query: PRODUCTS_QUERY
     })
-
-    console.log(JSON.stringify(res, null, 2))
     
     // Transform the nested structure: res.body.data.products.edges -> flat array of products
     const edges = res.body?.data?.products?.edges || []

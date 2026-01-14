@@ -10,14 +10,14 @@ import Image from 'next/image';
 
 export default function Shop() {
   // const data = await api.products();
-  const { bears, addABear } = useCartStore();
+  const { items, addItem } = useCartStore();
 
   return (
     <div className='flex gap-6 h-dvh items-center justify-center'>
-      <button onClick={() => addABear()}>
+      {/*<button onClick={() => addABear()}>
         Add a Bear
       </button>
-      <h1>{bears}</h1>
+      <h1>{bears}</h1>*/}
       {/*{data && data.length > 0 ? (
         data.map(d => (
           <div key={d.id} className='w-xs h-105 border border-black shadow-2xl cursor-pointer transition-all duration-500 hover:scale-105 p-4 rounded-2xl flex flex-col gap-2'>

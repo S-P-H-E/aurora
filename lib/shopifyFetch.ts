@@ -1,9 +1,11 @@
+import { env } from "./env/server";
+
 export async function shopifyFetch({
     query,
     variables
   }: { query: string; variables?: string }) {
-    const endpoint = `https://${process.env.SHOPIFY_DOMAIN!}/api/2026-01/graphql.json`;
-    const key = process.env.SHOPIFY_TOKEN!;
+    const endpoint = `https://${env.SHOPIFY_DOMAIN!}/api/2026-01/graphql.json`;
+    const key = env.SHOPIFY_TOKEN!;
   
     try {
       const result = await fetch(endpoint, {

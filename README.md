@@ -1,5 +1,5 @@
-# Aura Crystals
-This is the Aura Crystals ecommerce project.
+# Aurora
+This is the Aurora ecommerce project.
 
 It consists of:
 - A Next.js frontend

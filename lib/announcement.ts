@@ -16,10 +16,5 @@ export async function getAnnouncement() {
 
   const metafield = res.body?.data?.shop?.metafield;
   
-  return metafield?.value || null;
+  return metafield?.value as string;
 }
-
-// * add this in another file to be called in.
-const res = await getAnnouncement();
-console.log(`Announcement: "${res}"`)
-// * ends here

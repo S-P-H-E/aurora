@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { shopifyFetch } from "./shopifyFetch";
 
-const ProductSchema = z.object({
+export const ProductSchema = z.object({
     id: z.string(),
     title: z.string(),
     description: z.string(),
@@ -13,7 +13,7 @@ const ProductSchema = z.object({
     }))
 })
 
-const ProductsResponseSchema = z.array(ProductSchema)
+export const ProductsResponseSchema = z.array(ProductSchema)
 
 const PRODUCTS_QUERY = `{
     products(first: 10) {

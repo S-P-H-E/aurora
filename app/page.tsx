@@ -3,5 +3,5 @@ export default async function Home() {
     <div>
       <h1>Home</h1>
     </div>
-  )
+  );
 }

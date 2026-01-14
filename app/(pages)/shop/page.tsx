@@ -19,5 +19,5 @@ export default async function Shop() {
         <p>Data not found.</p>
       )}
     </div>
-  )
+  );
 }

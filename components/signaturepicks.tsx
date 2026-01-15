@@ -51,7 +51,7 @@ export default function SignaturePicks({ data }: { data: string }) {
           <h1 className="text-black text-[50px] font-semibold w-[340px]">Our Signature Crystal Picks</h1>
           <p className="text-black text-[20px] text-end font-medium">Pieces defined by natural beauty, vibrant<br/> energy, and a refined sense of timeless elegance.</p>
         </div>
-        <div className="flex items-center justify-between py-4 gap-6 mt-[40px] mx-10">
+        <div className="flex items-center justify-between py-4 mt-[40px] px-20">
           {products.map((product, index) => (
             <div className="flex flex-col" key={product.key}>
               <Image

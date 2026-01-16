@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Google_Sans_Flex } from "next/font/google";
+import { NuqsAdapter } from 'nuqs/adapters/next/app'
 
 const googleSansFlex = Google_Sans_Flex({
   subsets: ["latin"],
@@ -25,7 +26,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning className={googleSansFlex.className}>
-      <body>{children}</body>
+      <body>
+      <NuqsAdapter>
+        {children}
+      </NuqsAdapter>
+      </body>
     </html>
   );
 }

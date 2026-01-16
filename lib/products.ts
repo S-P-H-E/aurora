@@ -15,8 +15,8 @@ export const ProductSchema = z.object({
 
 export const ProductsResponseSchema = z.array(ProductSchema)
 
-const PRODUCTS_QUERY = `{
-    products(first: 10) {
+const PRODUCTS_QUERY = `query Products($first: Int!, $query: String) {
+    products(first: $first, query: $query) {
       edges {
         node {
           id
@@ -46,9 +46,10 @@ const PRODUCTS_QUERY = `{
 //     shop { name }
 // }`
 
-export async function getProducts() {
+export async function getProducts({ first = 250, query }: { first?: number; query?: string } = {}) {
     const res = await shopifyFetch({
-      query: PRODUCTS_QUERY
+      query: PRODUCTS_QUERY,
+      variables: { first, query: query && query.trim().length > 0 ? query : undefined }
     })
     
     // Transform the nested structure: res.body.data.products.edges -> flat array of products

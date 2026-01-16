@@ -8,6 +8,7 @@ import Cart from "./cart";
 import { FaArrowRight } from "react-icons/fa";
 
 import { forwardRef, Ref } from "react";
+import Search from "./search";
 
 export default forwardRef(function Hero(
   { data }: { data: string },
@@ -62,9 +63,7 @@ export default forwardRef(function Hero(
               {/*Veritcal Line*/}
               <div className="h-6 w-[1.5px] rounded-2xl bg-white" />
 
-              <button className="cursor-pointer transition-all hover:scale-110">
-                <LuSearch />
-              </button>
+              <Search />
               <Cart />
             </div>
           </div>

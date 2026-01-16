@@ -3,7 +3,7 @@ import { env } from "./env/server";
 export async function shopifyFetch({
     query,
     variables
-  }: { query: string; variables?: string }) {
+  }: { query: string; variables?: Record<string, unknown> }) {
     const endpoint = `https://${env.SHOPIFY_DOMAIN!}/api/2026-01/graphql.json`;
     const key = env.SHOPIFY_TOKEN!;
   

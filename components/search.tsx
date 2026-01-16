@@ -1,21 +1,48 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { parseAsString, useQueryState } from "nuqs";
-import { LuSearch, LuX } from "react-icons/lu";
+import { LuChevronDown, LuSearch, LuX } from "react-icons/lu";
 import { api } from "@/lib/orpc";
 import { z } from "zod";
 import { ProductsResponseSchema } from "@/lib/products";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import Image from "next/image";
 
 type Product = z.infer<typeof ProductsResponseSchema>[number];
+
+type PriceRange = "all" | "0-150" | "150-300" | "300-500";
+
+const priceRanges: { value: PriceRange; label: string }[] = [
+  { value: "all", label: "All Prices" },
+  { value: "0-150", label: "R0 - R150" },
+  { value: "150-300", label: "R150 - R300" },
+  { value: "300-500", label: "R300 - R500+" },
+];
+
+// Helper to extract numeric price from string like "450.00 ZAR"
+const getNumericPrice = (priceStr: string): number => {
+  const match = priceStr.match(/[\d.]+/);
+  return match ? parseFloat(match[0]) : 0;
+};
 
 export default function Search() {
   const [query, setQuery] = useQueryState("q", parseAsString.withDefault(""));
   const [open, setOpen] = useState(false);
   const [products, setProducts] = useState<Product[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
+  const [priceRange, setPriceRange] = useState<PriceRange>("all");
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Filter products by price range
+  const filteredProducts = products.filter((product) => {
+    if (priceRange === "all") return true;
+    const price = getNumericPrice(product.price);
+    if (priceRange === "0-150") return price >= 0 && price <= 150;
+    if (priceRange === "150-300") return price > 150 && price <= 300;
+    if (priceRange === "300-500") return price > 300;
+    return true;
+  });
 
   const handleOpenChange = (nextOpen: boolean) => {
     setOpen(nextOpen);
@@ -76,20 +103,38 @@ export default function Search() {
         {/* Search input */}
         <div className="mb-8">
           <h2 className="text-2xl font-semibold mb-4">Search Products</h2>
-          <div className="px-5 py-3 rounded-xl border border-[#E7E7E7] flex items-center gap-3">
-            <LuSearch className="text-[#9A9A9A] w-5 h-5" />
-            <input placeholder="Search for any product..." value={query} onChange={(e) => setQuery(e.target.value)} className="placeholder:text-[#9A9A9A] outline-none w-full text-lg" />
+          <div className="flex gap-3">
+            <div className="px-5 py-3 rounded-xl border border-[#E7E7E7] flex items-center gap-3 flex-1">
+              <LuSearch className="text-[#9A9A9A] w-5 h-5" />
+              <input placeholder="Search for any product..." value={query} onChange={(e) => setQuery(e.target.value)} className="placeholder:text-[#9A9A9A] outline-none w-full text-lg" />
+            </div>
+            {/* Price Range Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="px-5 py-3 rounded-xl border border-[#E7E7E7] flex items-center gap-2 hover:bg-gray-50 transition-colors whitespace-nowrap">
+                  <span className="text-[#9A9A9A]">{priceRanges.find((r) => r.value === priceRange)?.label}</span>
+                  <LuChevronDown className="text-[#9A9A9A] w-4 h-4" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="bg-white text-black">
+                {priceRanges.map((range) => (
+                  <DropdownMenuItem key={range.value} onClick={() => setPriceRange(range.value)} className={priceRange === range.value ? "bg-gray-100" : ""}>
+                    {range.label}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
 
         {/* Results */}
-        {hasSearched && !products?.length ? (
+        {hasSearched && !filteredProducts?.length ? (
           <div className="flex items-center justify-center py-12">
             <p className="text-[#9A9A9A] text-lg">No products found.</p>
           </div>
-        ) : products?.length ? (
+        ) : filteredProducts?.length ? (
           <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-            {products.map((product) => (
+            {filteredProducts.map((product) => (
               <div key={product.id} className="group cursor-pointer">
                 {/* Product Image */}
                 <div className="aspect-4/5 relative rounded-xl overflow-hidden bg-gray-100 mb-4">

@@ -28,11 +28,18 @@ const getNumericPrice = (priceStr: string): number => {
 
 export default function Search() {
   const [query, setQuery] = useQueryState("q", parseAsString.withDefault(""));
+  const [priceRangeParam, setPriceRangeParam] = useQueryState("p", parseAsString.withDefault(""));
   const [open, setOpen] = useState(false);
   const [products, setProducts] = useState<Product[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
-  const [priceRange, setPriceRange] = useState<PriceRange>("all");
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Derive price range from param or default to "all"
+  const priceRange: PriceRange = (["all", "0-150", "150-300", "300-500"].includes(priceRangeParam) ? priceRangeParam : "all") as PriceRange;
+
+  const setPriceRange = (value: PriceRange) => {
+    setPriceRangeParam(value === "all" ? null : value);
+  };
 
   // Filter products by price range
   const filteredProducts = products.filter((product) => {
@@ -46,12 +53,16 @@ export default function Search() {
 
   const handleOpenChange = (nextOpen: boolean) => {
     setOpen(nextOpen);
-    if (!nextOpen) setQuery(null);
+    if (!nextOpen) {
+      setQuery(null);
+      setPriceRangeParam(null);
+    }
   };
 
+  // Open dialog if query or price param is present
   useEffect(() => {
-    if (query) setOpen(true);
-  }, [query]);
+    if (query || priceRangeParam) setOpen(true);
+  }, [query, priceRangeParam]);
 
   // Initial fetch when dialog opens
   useEffect(() => {
@@ -89,7 +100,7 @@ export default function Search() {
           <LuSearch />
         </button>
       </DialogTrigger>
-      <DialogContent className="max-w-6xl w-screen max-h-[85vh] overflow-y-auto p-8">
+      <DialogContent className="!max-w-5xl sm:!max-w-5xl w-[75vw] max-h-[70vh] overflow-y-auto p-8">
         <DialogHeader className="sr-only">
           <DialogTitle>Search products</DialogTitle>
           <DialogDescription>Find items available in the store.</DialogDescription>
@@ -133,11 +144,11 @@ export default function Search() {
             <p className="text-[#9A9A9A] text-lg">No products found.</p>
           </div>
         ) : filteredProducts?.length ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
             {filteredProducts.map((product) => (
               <div key={product.id} className="group cursor-pointer">
                 {/* Product Image */}
-                <div className="aspect-4/5 relative rounded-xl overflow-hidden bg-gray-100 mb-4">
+                <div className="aspect-square relative rounded-xl overflow-hidden bg-gray-100 mb-3 max-w-[150px]">
                   {product.assets[0]?.url ? (
                     <Image src={product.assets[0].url} alt={product.assets[0].altText || product.title} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
                   ) : (
@@ -148,7 +159,7 @@ export default function Search() {
                 </div>
                 {/* Product Info */}
                 <div className="flex flex-col gap-1">
-                  <h3 className="font-semibold text-lg uppercase line-clamp-1">{product.title}</h3>
+                  <h3 className="font-semibold text-lg uppercase">{product.title}</h3>
                   <p className="text-sm text-[#9A9A9A] line-clamp-1">{product.description}</p>
                   <p className="text-xl font-bold mt-2">{product.price}</p>
                 </div>

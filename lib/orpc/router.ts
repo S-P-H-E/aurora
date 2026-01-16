@@ -2,6 +2,7 @@ import { os } from "@orpc/server";
 import { z } from "zod";
 import { getProducts } from "../products";
 import { getAnnouncement } from "../announcement";
+import { createCheckout, CheckoutInputSchema } from "../checkout";
 
 const products = os
   .input(
@@ -24,7 +25,15 @@ const announcement = os
     return data ;
   });
 
+const checkout = os
+  .input(CheckoutInputSchema)
+  .handler(async({ input }) => {
+    const data = await createCheckout(input);
+    return data;
+  });
+
 export const router = {
   products,
-  announcement
+  announcement,
+  checkout
 }

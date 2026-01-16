@@ -41,10 +41,17 @@ export default function Shop() {
       <div className='flex flex-wrap gap-6 items-start justify-center'>
         {products.map(d => (
           <div key={d.id} className='w-xs h-105 border border-black shadow-2xl cursor-pointer transition-all duration-500 hover:scale-105 p-4 rounded-2xl flex flex-col gap-2'>
-            <Image src={d.assets[0]?.url} className='rounded-xl w-full h-65 object-cover' alt={d.assets[0]?.altText || d.title} width={400} height={0} />
+            <div className="relative">
+              <Image src={d.assets[0]?.url} className={`rounded-xl w-full h-65 object-cover ${d.soldOut ? "opacity-50 grayscale" : ""}`} alt={d.assets[0]?.altText || d.title} width={400} height={0} />
+              {d.soldOut && (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="bg-black/70 text-white text-sm font-semibold px-3 py-1.5 rounded">SOLD OUT</span>
+                </div>
+              )}
+            </div>
             <h1 className='font-semibold text-3xl'>{d.title}</h1>
             <p>{d.description}</p>
-            <p className='font-semibold'>{d.price}</p>
+            <p className={`font-semibold ${d.soldOut ? "text-gray-400" : ""}`}>{d.soldOut ? "Sold Out" : d.price}</p>
           </div>
         ))}
       </div>

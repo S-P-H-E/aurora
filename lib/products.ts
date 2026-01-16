@@ -3,9 +3,11 @@ import { shopifyFetch } from "./shopifyFetch";
 
 export const ProductSchema = z.object({
     id: z.string(),
+    variantId: z.string(),
     title: z.string(),
     description: z.string(),
     price: z.string(),
+    soldOut: z.boolean(),
     assets: z.array(z.object({
       id: z.string().optional(),
       url: z.string(),
@@ -22,10 +24,19 @@ const PRODUCTS_QUERY = `query Products($first: Int!, $query: String) {
           id
           title
           description
+          availableForSale
           priceRange {
             minVariantPrice {
               amount
               currencyCode
+            }
+          }
+          variants(first: 1) {
+            edges {
+              node {
+                id
+                availableForSale
+              }
             }
           }
           images(first: 10) {
@@ -56,11 +67,14 @@ export async function getProducts({ first = 250, query }: { first?: number; quer
     const edges = res.body?.data?.products?.edges || []
     const products = edges.map((edge: any) => {
       const node = edge.node
+      const variant = node.variants?.edges?.[0]?.node
       return {
         id: node.id,
+        variantId: variant?.id || node.id,
         title: node.title,
         description: node.description || '',
         price: `${node.priceRange?.minVariantPrice?.amount} ${node.priceRange?.minVariantPrice?.currencyCode}`,
+        soldOut: !(variant?.availableForSale ?? node.availableForSale ?? true),
         assets: node.images?.edges?.map((imgEdge: any) => ({
           id: imgEdge.node.id,
           url: imgEdge.node.url,

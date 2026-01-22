@@ -13,11 +13,8 @@ import {
   Dialog,
   DialogTrigger,
   DialogContent,
-  DialogOverlay,
-    DialogTitle,
+  DialogTitle,
 } from "@/components/ui/dialog";
-import { X } from "lucide-react";
-import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 
 export default function HeroCarousel() {
@@ -60,37 +57,22 @@ export default function HeroCarousel() {
                     </button>
                 </DialogTrigger>
 
-                {/* Blurred + locked background */}
-                <DialogOverlay className="bg-black/40 backdrop-blur-md" />
-
-                <DialogContent
-                    className="
-                    fixed
-                    left-1/2
-                    top-1/2
-                    -translate-x-1/2
-                    -translate-y-1/2
-                    w-full
-                    max-w-5xl
-                    h-[100dvh]
-                    md:h-[90vh]
-                    overflow-y-auto
-                    overscroll-contain
-                    p-0
-                    rounded-none
-                    md:rounded-2xl
-                    "
-                >
+                <DialogContent variant="bottom">
                     {/* REQUIRED for a11y */}
                     <DialogTitle className="sr-only">
                     TrekDrive — Twice the Efficiency. All the Freedom.
                     </DialogTitle>
 
+                    {/* Drag indicator */}
+                    <div className="flex justify-center pt-4 pb-2">
+                        <div className="w-12 h-1.5 bg-muted-foreground/20 rounded-full" />
+                    </div>
+
                     {/* Content */}
-                    <div className="px-10 pb-16 space-y-10">
-                    <header className="pt-10">
-                        <p className="text-sm text-muted-foreground">TrekDrive</p>
-                        <h2 className="mt-2 text-3xl font-semibold">
+                    <div className="px-6 md:px-8 pb-12 space-y-6">
+                    <header className="pt-6">
+                        <p className="text-xs text-muted-foreground uppercase tracking-wider">TrekDrive</p>
+                        <h2 className="mt-2 text-2xl md:text-3xl font-semibold">
                         Twice the Efficiency. All the Freedom.
                         </h2>
                     </header>
@@ -98,10 +80,10 @@ export default function HeroCarousel() {
                     <img
                         src="/images/trekdrive.jpg"
                         alt="TrekDrive"
-                        className="h-[420px] w-full rounded-xl object-cover"
+                        className="h-[280px] w-full rounded-xl object-cover"
                     />
 
-                    <div className="max-w-3xl space-y-6 text-muted-foreground">
+                    <div className="space-y-4 text-muted-foreground text-sm leading-relaxed">
                         <p>
                         TrekDrive combines electric efficiency with long-range capability,
                         giving you complete freedom to explore without compromise.
@@ -113,7 +95,7 @@ export default function HeroCarousel() {
                     </div>
                     </div>
                 </DialogContent>
-                </Dialog>
+            </Dialog>
 
 
               </div>

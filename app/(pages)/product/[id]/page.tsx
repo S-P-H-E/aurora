@@ -66,6 +66,25 @@ export default function ProductPage() {
     }
   }, [productId]);
 
+  // Keyboard navigation for image gallery
+  useEffect(() => {
+    if (!product) return;
+
+    const images = product.assets.filter((a) => a.url);
+    if (images.length <= 1) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") {
+        setSelectedImageIndex((prev) => (prev > 0 ? prev - 1 : images.length - 1));
+      } else if (e.key === "ArrowRight") {
+        setSelectedImageIndex((prev) => (prev < images.length - 1 ? prev + 1 : 0));
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [product]);
+
   useEffect(() => {
     if (!loading && product) {
       // Animate main image
@@ -170,6 +189,11 @@ export default function ProductPage() {
   const images = product.assets.filter((a) => a.url);
   const hasMultipleImages = images.length > 1;
 
+  // Format price to show only the currency symbol and amount
+  const formatPrice = (price: string) => {
+    return price.replace(" ZAR", "").trim();
+  };
+
   return (
     <div className="min-h-dvh bg-background">
       {/* Navigation */}
@@ -225,15 +249,15 @@ export default function ProductPage() {
             {/* Main Image */}
             <div
               ref={mainImageRef}
-              className="relative aspect-square overflow-hidden bg-secondary/30"
+              className="relative aspect-square overflow-hidden bg-secondary/30 group"
             >
               {images[selectedImageIndex]?.url ? (
                 <Image
                   src={images[selectedImageIndex].url}
                   alt={images[selectedImageIndex].altText || product.title}
                   fill
-                  className={`object-cover transition-opacity duration-300 ${
-                    product.soldOut ? "opacity-30" : ""
+                  className={`object-cover transition-all duration-500 ${
+                    product.soldOut ? "opacity-30" : "group-hover:scale-105"
                   }`}
                 />
               ) : (
@@ -291,7 +315,7 @@ export default function ProductPage() {
                   product.soldOut ? "text-[#9A9A9A]" : ""
                 }`}
               >
-                {product.soldOut ? "—" : product.price.replace(" ZAR", "")}
+                {product.soldOut ? "—" : formatPrice(product.price)}
               </p>
             </div>
 
@@ -391,7 +415,7 @@ export default function ProductPage() {
                         >
                           {recProduct.soldOut
                             ? "—"
-                            : recProduct.price.replace(" ZAR", "")}
+                            : formatPrice(recProduct.price)}
                         </p>
                       </div>
                     </div>

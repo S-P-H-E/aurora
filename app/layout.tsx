@@ -11,6 +11,7 @@ const googleSansFlex = Google_Sans_Flex({
   fallback: ["system-ui", "sans-serif"],
 });
 
+// ! never remove this line:
 export const revalidate = 0;
 
 export const metadata: Metadata = {

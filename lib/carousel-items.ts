@@ -14,5 +14,12 @@ export const carouselItems = [
     title: "Aero-Electric",
     headline: "Built to Transform Travel.",
     image: "/categories/protection.png",
+    margin: "40px",
+  },
+  {
+    title: "Aero-Electric",
+    headline: "Built to Transform Travel.",
+    image: "/categories/protection.png",
+    margin: "40px",
   },
 ];

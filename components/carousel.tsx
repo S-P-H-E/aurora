@@ -11,10 +11,12 @@ import { carouselItems } from "@/lib/carousel-items";
 
 import {
   Dialog,
-  DialogTrigger,
   DialogContent,
+  DialogDescription,
+  DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+  DialogTrigger,
+} from "@/components/ui/dialog"
 
 
 export default function HeroCarousel() {
@@ -23,12 +25,12 @@ export default function HeroCarousel() {
       <Carousel
         opts={{
           align: "start",
-          loop: true,
+          loop: false,
         }}
         className="w-full"
       >
         {/* Slides */}
-        <CarouselContent className="-ml-4">
+        <CarouselContent className="-ml-4 mr-20 ">
           {carouselItems.map((item, index) => (
             <CarouselItem
               key={index}
@@ -51,50 +53,33 @@ export default function HeroCarousel() {
                 </div>
 
             <Dialog>
-                <DialogTrigger asChild>
-                    <button className="absolute bottom-6 right-6 flex h-10 w-10 items-center justify-center rounded-full bg-black/60 text-xl text-white backdrop-blur group-hover:bg-amber-600 transition-all duration-700">
-                    +
-                    </button>
-                </DialogTrigger>
+              <DialogTrigger asChild>
+                <button className="absolute bottom-6 right-6 flex h-10 w-10 items-center justify-center rounded-full bg-black/60 text-xl text-white backdrop-blur group-hover:bg-amber-600 transition-all">
+                  +
+                </button>
+              </DialogTrigger>
 
-                <DialogContent variant="bottom">
-                    {/* REQUIRED for a11y */}
-                    <DialogTitle className="sr-only">
-                    TrekDrive — Twice the Efficiency. All the Freedom.
-                    </DialogTitle>
-
-                    {/* Drag indicator */}
-                    <div className="flex justify-center pt-4 pb-2">
-                        <div className="w-12 h-1.5 bg-muted-foreground/20 rounded-full" />
-                    </div>
-
-                    {/* Content */}
-                    <div className="px-6 md:px-8 pb-12 space-y-6">
-                    <header className="pt-6">
-                        <p className="text-xs text-muted-foreground uppercase tracking-wider">TrekDrive</p>
-                        <h2 className="mt-2 text-2xl md:text-3xl font-semibold">
-                        Twice the Efficiency. All the Freedom.
-                        </h2>
-                    </header>
-
-                    <img
-                        src="/images/trekdrive.jpg"
-                        alt="TrekDrive"
-                        className="h-[280px] w-full rounded-xl object-cover"
-                    />
-
-                    <div className="space-y-4 text-muted-foreground text-sm leading-relaxed">
-                        <p>
-                        TrekDrive combines electric efficiency with long-range capability,
-                        giving you complete freedom to explore without compromise.
-                        </p>
-                        <p>
-                        Add as much content as you want here — specs, tables, videos,
-                        carousels — this dialog will scroll properly.
-                        </p>
-                    </div>
-                    </div>
-                </DialogContent>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Scrollable Content</DialogTitle>
+                  <DialogDescription>
+                    This is a dialog with scrollable content.
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="no-scrollbar -mx-4 max-h-[50vh] overflow-y-auto px-4">
+                  {Array.from({ length: 10 }).map((_, index) => (
+                    <p key={index} className="mb-4 leading-normal">
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+                      eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+                      enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                      nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+                      reprehenderit in voluptate velit esse cillum dolore eu fugiat
+                      nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+                      sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    </p>
+                  ))}
+                </div>
+              </DialogContent>
             </Dialog>
 
 
@@ -102,6 +87,18 @@ export default function HeroCarousel() {
             </CarouselItem>
           ))}
         </CarouselContent>
+
+        
+
+            <div
+              aria-hidden
+              className="
+                pl-4
+                basis-[7.5%]
+                md:basis-[20%]
+                lg:basis-[26%]
+              "
+            />
 
         {/* Bottom controls */}
         <div className="mt-8 flex items-center gap-4">

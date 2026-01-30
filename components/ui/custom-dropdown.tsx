@@ -112,9 +112,10 @@ function DropdownMenuContent({
           left = triggerRect.left;
         }
 
-        // Keep within viewport
-        if (left + 200 > window.innerWidth) {
-          left = window.innerWidth - 208;
+        // Keep within viewport (use actual content width or trigger width as fallback)
+        const contentWidth = contentRef.current?.offsetWidth || 384;
+        if (left + contentWidth > window.innerWidth) {
+          left = window.innerWidth - contentWidth - 8;
         }
         if (left < 8) left = 8;
 

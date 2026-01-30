@@ -5,8 +5,8 @@ export default function Footer() {
 
   return (
     <footer className="relative z-20 border-t border-border bg-background">
-      <div className="px-15 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+      <div className="px-4 md:px-15 py-12 md:py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
           {/* Brand Column */}
           <div className="space-y-4">
             <Link href="/" className="inline-block cursor-pointer">

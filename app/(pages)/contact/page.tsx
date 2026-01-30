@@ -50,7 +50,7 @@ export default function Contact() {
     <div className="min-h-dvh bg-background">
       {/* Navigation */}
       <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur-md border-b border-border">
-        <div className="flex items-center justify-between px-15 py-4">
+        <div className="flex items-center justify-between px-4 md:px-15 py-3 md:py-4">
           <Link href="/" className="flex items-center gap-2 group cursor-pointer">
             <FaArrowLeft className="w-3 h-3 group-hover:-translate-x-1 transition-transform duration-300" />
             <span className="text-xs font-medium">Back</span>
@@ -59,11 +59,11 @@ export default function Contact() {
             <h1 className="text-xl font-medium">Aurora.</h1>
           </Link>
           <div className="flex items-center gap-4">
-            <Link href="/shop" className="group cursor-pointer">
+            <Link href="/shop" className="group cursor-pointer hidden sm:block">
               <span className="text-xs">Shop</span>
               <div className="bg-foreground h-px transition-all origin-left scale-x-0 group-hover:scale-x-100" />
             </Link>
-            <Link href="/about" className="group cursor-pointer">
+            <Link href="/about" className="group cursor-pointer hidden sm:block">
               <span className="text-xs">About</span>
               <div className="bg-foreground h-px transition-all origin-left scale-x-0 group-hover:scale-x-100" />
             </Link>
@@ -72,17 +72,17 @@ export default function Contact() {
       </nav>
 
       {/* Contact Hero */}
-      <div ref={heroRef} className="px-15 pt-20 pb-16">
+      <div ref={heroRef} className="px-4 md:px-15 pt-16 md:pt-20 pb-12 md:pb-16">
         <div>
           <p className="hero-animate text-[10px] font-medium text-[#9A9A9A] tracking-widest uppercase mb-4">
             [Get in Touch]
           </p>
-          <h1 className="hero-animate text-5xl lg:text-7xl font-medium leading-tight mb-8">
+          <h1 className="hero-animate text-4xl md:text-5xl lg:text-7xl font-medium leading-tight mb-8">
             Let's Start
             <br />
             a Conversation
           </h1>
-          <p className="hero-animate text-lg text-[#9A9A9A] max-w-3xl">
+          <p className="hero-animate text-base md:text-lg text-[#9A9A9A] max-w-3xl">
             Have a question about our crystals? Looking for something specific?
             We'd love to hear from you.
           </p>
@@ -90,8 +90,8 @@ export default function Contact() {
       </div>
 
       {/* Contact Content */}
-      <div ref={contentRef} className="px-15 pb-20">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+      <div ref={contentRef} className="px-4 md:px-15 pb-16 md:pb-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16">
           {/* Contact Form */}
           <div className="content-animate">
             <form onSubmit={handleSubmit} className="space-y-6">

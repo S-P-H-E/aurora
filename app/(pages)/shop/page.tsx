@@ -173,7 +173,7 @@ export default function Shop() {
     <div className="min-h-dvh bg-background">
       {/* Navigation */}
       <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur-md border-b border-border">
-        <div className="flex items-center justify-between px-15 py-4">
+        <div className="flex items-center justify-between px-4 md:px-15 py-3 md:py-4">
           <Link href="/" className="flex items-center gap-2 group cursor-pointer">
             <FaArrowLeft className="w-3 h-3 group-hover:-translate-x-1 transition-transform duration-300" />
             <span className="text-xs font-medium">Back</span>
@@ -182,28 +182,28 @@ export default function Shop() {
             <h1 className="text-xl font-medium">Aurora.</h1>
           </Link>
           <div className="flex items-center gap-4">
-            <Link href="/about" className="group cursor-pointer">
+            <Link href="/about" className="group cursor-pointer hidden sm:block">
               <span className="text-xs">About</span>
               <div className="bg-foreground h-px transition-all origin-left scale-x-0 group-hover:scale-x-100" />
             </Link>
-            <Link href="/contact" className="group cursor-pointer">
+            <Link href="/contact" className="group cursor-pointer hidden sm:block">
               <span className="text-xs">Contact</span>
               <div className="bg-foreground h-px transition-all origin-left scale-x-0 group-hover:scale-x-100" />
             </Link>
-            <div className="h-4 w-px bg-border" />
+            <div className="h-4 w-px bg-border hidden sm:block" />
             <Cart />
           </div>
         </div>
       </nav>
 
       {/* Shop Hero */}
-      <div ref={heroRef} className="px-15 pt-16 pb-12">
+      <div ref={heroRef} className="px-4 md:px-15 pt-12 md:pt-16 pb-8 md:pb-12">
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
           <div className="space-y-3">
             <p className="hero-animate text-[10px] font-medium text-[#9A9A9A] tracking-widest uppercase">
               [Collection]
             </p>
-            <h1 className="hero-animate text-5xl lg:text-6xl font-medium leading-tight">
+            <h1 className="hero-animate text-4xl md:text-5xl lg:text-6xl font-medium leading-tight">
               Our Crystal
               <br />
               Collection
@@ -218,8 +218,8 @@ export default function Shop() {
 
       {/* Filters Bar */}
       <div className="sticky top-[65px] z-40 bg-background border-y border-border">
-        <div className="px-15 py-3">
-          <div className="flex flex-col lg:flex-row lg:items-center gap-3">
+        <div className="px-4 md:px-15 py-3">
+          <div className="flex flex-col gap-3 md:gap-0 lg:flex-row lg:items-center">
             {/* Search Input */}
             <div className="flex-1 max-w-sm">
               <div className="relative">
@@ -307,7 +307,7 @@ export default function Shop() {
       </div>
 
       {/* Products Grid */}
-      <div className="px-15 py-8">
+      <div className="px-4 md:px-15 py-6 md:py-8">
         {filteredProducts.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-24 gap-3">
             <LuSearch className="w-8 h-8 text-[#9A9A9A]" />
@@ -325,7 +325,7 @@ export default function Shop() {
         ) : (
           <div
             ref={gridRef}
-            className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-2.5 gap-y-5"
+            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-2 gap-y-4 md:gap-x-2.5 md:gap-y-5"
           >
             {filteredProducts.map((product) => (
               <Link
@@ -393,17 +393,17 @@ export default function Shop() {
       </div>
 
       {/* Footer CTA */}
-      <div className="px-15 py-16 border-t border-border">
+      <div className="px-4 md:px-15 py-12 md:py-16 border-t border-border">
         <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
           <div className="text-center lg:text-left">
-            <h2 className="text-2xl font-medium mb-2">Can't find what you're looking for?</h2>
+            <h2 className="text-xl md:text-2xl font-medium mb-2">Can't find what you're looking for?</h2>
             <p className="text-[#9A9A9A] text-sm">
               Contact us for custom orders or special requests.
             </p>
           </div>
           <Link
             href="/contact"
-            className="px-6 py-3 bg-foreground text-background hover:bg-foreground/90 transition-colors flex items-center gap-2 group text-xs font-medium tracking-wider uppercase cursor-pointer"
+            className="px-6 py-3 bg-foreground text-background hover:bg-foreground/90 transition-colors flex items-center justify-center gap-2 group text-xs font-medium tracking-wider uppercase cursor-pointer w-full sm:w-auto"
           >
             <span>Get in Touch</span>
             <FaArrowRight className="-rotate-45 group-hover:rotate-0 transition-transform duration-300 w-3 h-3" />
@@ -419,19 +419,19 @@ function ShopSkeleton() {
     <div className="min-h-dvh bg-background">
       {/* Nav Skeleton */}
       <nav className="sticky top-0 z-50 bg-background border-b border-border">
-        <div className="flex items-center justify-between px-15 py-4">
+        <div className="flex items-center justify-between px-4 md:px-15 py-3 md:py-4">
           <div className="w-16 h-3 bg-secondary/30 animate-pulse" />
           <div className="w-20 h-5 bg-secondary/30 animate-pulse" />
           <div className="flex items-center gap-4">
-            <div className="w-10 h-3 bg-secondary/30 animate-pulse" />
-            <div className="w-12 h-3 bg-secondary/30 animate-pulse" />
+            <div className="w-10 h-3 bg-secondary/30 animate-pulse hidden sm:block" />
+            <div className="w-12 h-3 bg-secondary/30 animate-pulse hidden sm:block" />
             <div className="w-6 h-6 bg-secondary/30 rounded-full animate-pulse" />
           </div>
         </div>
       </nav>
 
       {/* Hero Skeleton */}
-      <div className="px-15 pt-16 pb-12">
+      <div className="px-4 md:px-15 pt-12 md:pt-16 pb-8 md:pb-12">
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
           <div className="space-y-3">
             <div className="w-20 h-3 bg-secondary/30 animate-pulse" />
@@ -446,8 +446,8 @@ function ShopSkeleton() {
 
       {/* Filter Bar Skeleton */}
       <div className="sticky top-[65px] z-40 bg-background border-y border-border">
-        <div className="px-15 py-3">
-          <div className="flex items-center gap-3">
+        <div className="px-4 md:px-15 py-3">
+          <div className="flex flex-col gap-3 md:gap-0 lg:flex-row lg:items-center">
             <div className="flex-1 max-w-sm h-9 bg-secondary/30 animate-pulse" />
             <div className="w-28 h-9 bg-secondary/30 animate-pulse" />
             <div className="w-36 h-9 bg-secondary/30 animate-pulse" />
@@ -456,8 +456,8 @@ function ShopSkeleton() {
       </div>
 
       {/* Grid Skeleton */}
-      <div className="px-15 py-8">
-        <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-3 gap-y-6">
+      <div className="px-4 md:px-15 py-6 md:py-8">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-2 gap-y-4 md:gap-x-3 md:gap-y-6">
           {[...Array(18)].map((_, i) => (
             <div key={i} className="space-y-2.5">
               <div className="aspect-square bg-secondary/30 animate-pulse" />

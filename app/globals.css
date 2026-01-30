@@ -155,5 +155,33 @@ body[data-state="open"] {
   }
   body {
     @apply bg-background text-foreground;
+    /* Performance optimizations */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Performance optimizations for GSAP animations */
+@layer utilities {
+  /* GPU acceleration for animated elements */
+  .gpu-accelerate {
+    transform: translateZ(0);
+    will-change: transform;
+    backface-visibility: hidden;
+  }
+
+  /* Reduce paint for opacity-only animations */
+  .animate-opacity {
+    will-change: opacity;
+  }
+
+  /* Smooth scrolling with GPU acceleration */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Optimize images */
+  img {
+    image-rendering: -webkit-optimize-contrast;
   }
 }

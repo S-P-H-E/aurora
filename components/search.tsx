@@ -115,7 +115,7 @@ export default function Search() {
         </button>
       </DialogTrigger>
       <DialogContent
-        className="max-w-5xl! sm:max-w-5xl! w-[75vw] max-h-[70vh] overflow-y-auto p-0 bg-background border-border rounded-none overscroll-contain"
+        className="w-[95vw] sm:w-[85vw] md:w-[75vw] max-h-[70vh] overflow-y-auto p-0 bg-background border-border rounded-none overscroll-contain"
         onWheel={(e) => e.stopPropagation()}
         onTouchMove={(e) => e.stopPropagation()}
       >
@@ -127,7 +127,7 @@ export default function Search() {
         {/* Sticky Header and Controls */}
         <div className="sticky top-0 z-10 bg-background">
           {/* Header */}
-          <div className="border-b border-border px-6 py-4 flex items-center justify-between">
+          <div className="border-b border-border px-4 md:px-6 py-3 md:py-4 flex items-center justify-between">
             <h2 className="text-xs font-medium uppercase tracking-wider text-foreground">Search Products</h2>
             <DialogClose className="hover:opacity-70 transition-opacity outline-none cursor-pointer">
               <LuX className="w-4 h-4 text-foreground" />
@@ -135,8 +135,8 @@ export default function Search() {
           </div>
 
           {/* Search Controls */}
-          <div className="px-6 py-4 border-b border-border">
-          <div className="flex gap-2">
+          <div className="px-4 md:px-6 py-3 md:py-4 border-b border-border">
+          <div className="flex flex-col sm:flex-row gap-2">
             <div className="px-4 py-2.5 border border-border flex items-center gap-3 flex-1">
               <LuSearch className="text-[#9A9A9A] w-4 h-4" />
               <input
@@ -171,7 +171,7 @@ export default function Search() {
         </div>
 
         {/* Results */}
-        <div className="px-6 py-6 min-h-[280px]">
+        <div className="px-4 md:px-6 py-4 md:py-6 min-h-[280px]">
           {hasSearched && !filteredProducts?.length ? (
             <div className="flex flex-col items-center justify-center h-[280px]">
               <LuSearch className="w-8 h-8 text-[#9A9A9A] mb-3" />
@@ -182,7 +182,7 @@ export default function Search() {
               <p className="text-[10px] text-[#9A9A9A] mb-4 uppercase tracking-wider">
                 {filteredProducts.length} {filteredProducts.length === 1 ? 'Result' : 'Results'}
               </p>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4">
                 {filteredProducts.map((product) => (
                   <Link key={product.id} href={`/product/${product.numericId}`} className="group cursor-pointer">
                     {/* Product Image */}

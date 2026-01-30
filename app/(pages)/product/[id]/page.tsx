@@ -22,6 +22,7 @@ export default function ProductPage() {
   const [recommendedProducts, setRecommendedProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [quantity, setQuantity] = useState(1);
 
   const mainImageRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -130,8 +131,12 @@ export default function ProductPage() {
 
   const handleAddToCart = () => {
     if (product && !product.soldOut) {
-      addItem(product);
-      toast("Added to cart");
+      // Add the product multiple times based on quantity
+      for (let i = 0; i < quantity; i++) {
+        addItem(product);
+      }
+      toast(`Added ${quantity} item${quantity > 1 ? 's' : ''} to cart`);
+      setQuantity(1); // Reset quantity after adding
     }
   };
 
@@ -140,7 +145,7 @@ export default function ProductPage() {
       const lineItems = [
         {
           variantId: product.variantId,
-          quantity: 1,
+          quantity: quantity,
         },
       ];
 
@@ -198,7 +203,7 @@ export default function ProductPage() {
     <div className="min-h-dvh bg-background">
       {/* Navigation */}
       <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur-md border-b border-border">
-        <div className="flex items-center justify-between px-15 py-4">
+        <div className="flex items-center justify-between px-4 md:px-15 py-3 md:py-4">
           <Link
             href="/shop"
             className="flex items-center gap-2 group cursor-pointer"
@@ -210,22 +215,22 @@ export default function ProductPage() {
             <h1 className="text-xl font-medium">Aurora.</h1>
           </Link>
           <div className="flex items-center gap-4">
-            <Link href="/about" className="group cursor-pointer">
+            <Link href="/about" className="group cursor-pointer hidden sm:block">
               <span className="text-xs">About</span>
               <div className="bg-foreground h-px transition-all origin-left scale-x-0 group-hover:scale-x-100" />
             </Link>
-            <Link href="/contact" className="group cursor-pointer">
+            <Link href="/contact" className="group cursor-pointer hidden sm:block">
               <span className="text-xs">Contact</span>
               <div className="bg-foreground h-px transition-all origin-left scale-x-0 group-hover:scale-x-100" />
             </Link>
-            <div className="h-4 w-px bg-border" />
+            <div className="h-4 w-px bg-border hidden sm:block" />
             <Cart />
           </div>
         </div>
       </nav>
 
       {/* Breadcrumb */}
-      <div className="px-15 pt-6 pb-4">
+      <div className="px-4 md:px-15 pt-4 md:pt-6 pb-3 md:pb-4">
         <div className="flex items-center gap-2 text-xs text-[#9A9A9A]">
           <Link href="/" className="hover:text-foreground transition-colors cursor-pointer">
             Home
@@ -235,14 +240,14 @@ export default function ProductPage() {
             Shop
           </Link>
           <span>/</span>
-          <span className="text-foreground truncate max-w-[200px]">
+          <span className="text-foreground truncate max-w-[150px] md:max-w-[200px]">
             {product.title}
           </span>
         </div>
       </div>
 
       {/* Product Details */}
-      <div className="px-15 pb-16">
+      <div className="px-4 md:px-15 pb-12 md:pb-16">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           {/* Images */}
           <div className="lg:col-span-5 space-y-4">
@@ -307,11 +312,11 @@ export default function ProductPage() {
               <p className="text-[10px] font-medium text-[#9A9A9A] tracking-widest uppercase">
                 [Product Details]
               </p>
-              <h1 className="text-4xl lg:text-5xl font-medium leading-tight">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-medium leading-tight">
                 {product.title}
               </h1>
               <p
-                className={`text-2xl font-medium ${
+                className={`text-xl md:text-2xl font-medium ${
                   product.soldOut ? "text-[#9A9A9A]" : ""
                 }`}
               >
@@ -326,18 +331,40 @@ export default function ProductPage() {
               </div>
             </div>
 
+            {/* Quantity Selector */}
+            {!product.soldOut && (
+              <div className="animate-content">
+                <h3 className="text-sm font-medium mb-3">Quantity</h3>
+                <div className="flex items-center gap-4">
+                  <button
+                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                    className="w-10 h-10 border border-border flex items-center justify-center hover:bg-secondary transition-colors cursor-pointer text-foreground"
+                  >
+                    <FaArrowLeft className="w-3 h-3" />
+                  </button>
+                  <span className="text-lg font-medium w-12 text-center">{quantity}</span>
+                  <button
+                    onClick={() => setQuantity(quantity + 1)}
+                    className="w-10 h-10 border border-border flex items-center justify-center hover:bg-secondary transition-colors cursor-pointer text-foreground"
+                  >
+                    <FaArrowRight className="w-3 h-3" />
+                  </button>
+                </div>
+              </div>
+            )}
+
             {/* Add to Cart Button */}
             {!product.soldOut && (
-              <div className="animate-content flex gap-3">
+              <div className="animate-content flex flex-col sm:flex-row gap-3">
                 <button
                   onClick={handleAddToCart}
-                  className="flex-1 px-8 py-4 border border-border text-foreground transition-colors text-sm font-medium tracking-wider uppercase cursor-pointer"
+                  className="flex-1 px-6 md:px-8 py-3 md:py-4 border border-border text-foreground transition-colors text-sm font-medium tracking-wider uppercase cursor-pointer"
                 >
                   Add to Cart
                 </button>
                 <button
                   onClick={handleCheckout}
-                  className="flex-1 px-8 py-4 bg-foreground text-background hover:bg-foreground/90 transition-colors text-sm font-medium tracking-wider uppercase cursor-pointer"
+                  className="flex-1 px-6 md:px-8 py-3 md:py-4 bg-foreground text-background hover:bg-foreground/90 transition-colors text-sm font-medium tracking-wider uppercase cursor-pointer"
                 >
                   Checkout Now
                 </button>
@@ -358,16 +385,16 @@ export default function ProductPage() {
       {/* Recommended Products */}
       {recommendedProducts.length > 0 && (
         <div className="border-t border-border">
-          <div className="px-15 py-12">
+          <div className="px-4 md:px-15 py-10 md:py-12">
             <div className="space-y-8">
               <div>
                 <p className="text-[10px] font-medium text-[#9A9A9A] tracking-widest uppercase mb-3">
                   [You May Also Like]
                 </p>
-                <h2 className="text-3xl font-medium">Recommended Products</h2>
+                <h2 className="text-2xl md:text-3xl font-medium">Recommended Products</h2>
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-4">
                 {recommendedProducts.map((recProduct) => (
                   <Link
                     key={recProduct.id}

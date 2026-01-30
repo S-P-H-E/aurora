@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import {
   Carousel,
   CarouselContent,
@@ -21,7 +22,7 @@ import {
 
 export default function HeroCarousel() {
   return (
-    <section className="w-full py-16 mt-10 mb-20 overflow-hidden">
+    <section className="w-full py-8 md:py-12 lg:py-16 mt-6 md:mt-10 mb-12 md:mb-20 overflow-hidden">
       <Carousel
         opts={{
           align: "start",
@@ -30,17 +31,20 @@ export default function HeroCarousel() {
         className="w-full"
       >
         {/* Slides */}
-        <CarouselContent className="-ml-4 pl-[120px]">
+        <CarouselContent className="-ml-4 pl-4 md:pl-8 lg:pl-[120px]">
           {carouselItems.map((item, index) => (
             <CarouselItem
               key={index}
               className="pl-4 basis-[85%] md:basis-[60%] lg:basis-[48%] group"
             >
-              <div className="relative h-[420px] w-full overflow-hidden rounded-2xl">
-                <img
+              <div className="relative h-[300px] md:h-[350px] lg:h-[420px] w-full overflow-hidden rounded-2xl">
+                <Image
                   src={item.image}
                   alt={item.title}
-                  className="absolute inset-0 h-full w-full object-cover"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"
+                  loading="lazy"
                 />
 
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
@@ -90,7 +94,7 @@ export default function HeroCarousel() {
         </CarouselContent>
 
         {/* Bottom controls */}
-        <div className="mt-8 flex items-center gap-4 pl-[120px]">
+        <div className="mt-8 flex items-center gap-4 pl-4 md:pl-8 lg:pl-[120px]">
           <CarouselPrevious className="static translate-y-0" />
           <CarouselNext className="static translate-y-0" />
         </div>

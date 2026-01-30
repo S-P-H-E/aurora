@@ -3,8 +3,9 @@ import Marquee from "react-fast-marquee";
 import Image from "next/image";
 import Link from "next/link";
 import { FaXmark } from "react-icons/fa6";
-import { LuMouse, LuSearch } from "react-icons/lu";
+import { LuMouse } from "react-icons/lu";
 import Cart from "./cart";
+import MobileNav from "./mobile-nav";
 import { FaArrowRight } from "react-icons/fa";
 
 import { forwardRef, Ref, useRef } from "react";
@@ -22,26 +23,35 @@ export default forwardRef(function Hero(
   const heroRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
-    // Set initial state explicitly
-    gsap.set(heroRef.current, { y: 0, scale: 1, filter: 'blur(0px)' });
+    // Set initial state explicitly with GPU acceleration
+    gsap.set(heroRef.current, {
+      y: 0,
+      scale: 1,
+      opacity: 1,
+      force3D: true,
+    });
 
     // Delay ScrollTrigger creation to let Lenis initialize
     const timeout = setTimeout(() => {
-      ScrollTrigger.create({
+      const scrollTrigger = ScrollTrigger.create({
         trigger: "#signature-picks",
         start: "top bottom",
         end: "top top",
-        scrub: true,
+        scrub: 0.5, // Add smooth scrubbing for better performance
         onUpdate: (self) => {
           const progress = self.progress;
+          // Use transform3d and opacity instead of expensive blur filter
           gsap.set(heroRef.current, {
             y: 50 * progress,
             scale: 1 - 0.10 * progress,
-            filter: `blur(${1 * progress}px)`
+            opacity: 1 - (0.2 * progress), // Replace blur with opacity
+            force3D: true, // GPU acceleration
           });
         },
       });
       ScrollTrigger.refresh();
+
+      return () => scrollTrigger.kill();
     }, 100);
 
     return () => clearTimeout(timeout);
@@ -51,7 +61,7 @@ export default forwardRef(function Hero(
     <div
       id="hero"
       ref={heroRef}
-      className="h-dvh flex flex-col sticky top-0 z-10 will-change-transform"
+      className="h-dvh flex flex-col sticky top-0 z-10 will-change-transform will-change-opacity"
     >
       {/*
         Banner only displays if banner content
@@ -70,18 +80,42 @@ export default forwardRef(function Hero(
 
       {/*Hero*/}
       <div className="bg-black text-white flex-1 relative overflow-hidden">
-        <img
+        <Image
           src="/cover/02.png"
           alt="Cover Image"
-          className="w-full h-full object-cover"
-          width={1920}
-          height={1080}
+          fill
+          className="object-cover"
+          priority
+          sizes="100vw"
+          quality={85}
         />
-        <div className="absolute inset-0 bg-linear-to-t from-black/40 to-transparent flex flex-col items-start justify-between px-15 pb-15 pt-10">
-          {/*Navbar*/}
-          <div className="flex items-center justify-between w-full h-18">
+        <div className="absolute inset-0 bg-linear-to-t from-black/40 to-transparent flex flex-col items-start justify-between px-4 md:px-15 pb-8 md:pb-15 pt-8 md:pt-10">
+          {/*Navbar - Mobile*/}
+          <div className="flex md:hidden items-center justify-between w-full h-16">
+            <Image
+              src="/logo.png"
+              alt="Aurora Logo"
+              width={40}
+              height={40}
+              className="rounded-lg"
+            />
+            <div className="flex items-center gap-4">
+              <Search />
+              <Cart />
+              <MobileNav />
+            </div>
+          </div>
+
+          {/*Navbar - Desktop*/}
+          <div className="hidden md:flex items-center justify-between w-full h-18">
             <div className="w-full">
-              <h1 className="text-2xl font-medium">Aurora.</h1>
+              <Image
+                src="/logo.png"
+                alt="Aurora Logo"
+                width={50}
+                height={50}
+                className="rounded-lg"
+              />
             </div>
             <div className="w-fit px-6 flex items-center gap-6">
               <div className="group cursor-pointer">
@@ -106,31 +140,31 @@ export default forwardRef(function Hero(
           </div>
 
           {/*Rest of the Hero*/}
-          <div className="w-full flex justify-between items-center">
-            <div className="space-y-3">
-              <p className="font-medium">[Crystals]</p>
-              <h1 className="w-170 text-7xl font-medium">
+          <div className="w-full flex flex-col md:flex-row justify-between items-center md:items-end gap-6 md:gap-0">
+            <div className="space-y-3 w-full md:w-auto">
+              <p className="font-medium text-sm md:text-base">[Crystals]</p>
+              <h1 className="w-full md:w-170 text-4xl sm:text-5xl md:text-7xl font-medium">
                 Earth's Beauty, Captured in Crystal.
               </h1>
-              <div className="flex items-center gap-3 text-[#C4C4C4] mt-4">
+              <div className="flex items-center gap-3 text-[#C4C4C4] mt-4 text-sm md:text-base">
                 <LuMouse />
                 Scroll for more info.
               </div>
             </div>
-            <div className="w-87.5 flex flex-col gap-4">
-              <p>
+            <div className="w-full md:w-87.5 flex flex-col gap-4">
+              <p className="text-sm md:text-base">
                 Each crystal is formed over centuries, carrying the raw beauty
                 of the earth and selected for its clarity, color, and presence.
               </p>
-              <div className="flex gap-6">
+              <div className="flex flex-col sm:flex-row gap-4 md:gap-6">
                 <button className="bg-background text-foreground px-7 py-3 rounded-full group cursor-pointer">
-                  <a href="/shop" className="flex gap-3 items-center">
+                  <a href="/shop" className="flex gap-3 items-center justify-center">
                     Shop Now{" "}
                     <FaArrowRight className="-rotate-45 group-hover:rotate-0 group-hover:translate-x-1 transition-all duration-300 ease-out" />
                   </a>
                 </button>
                 <button className="group cursor-pointer">
-                  <a href="/about" className="flex gap-3 items-center">
+                  <a href="/about" className="flex gap-3 items-center justify-center">
                     Learn More{" "}
                     <FaArrowRight className="-rotate-45 group-hover:rotate-0 group-hover:translate-x-1 transition-all duration-300 ease-out" />
                   </a>

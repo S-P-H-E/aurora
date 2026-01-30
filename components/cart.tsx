@@ -1,6 +1,6 @@
 "use client";
 import { FiShoppingCart, FiMinus, FiPlus, FiTrash2 } from "react-icons/fi";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/custom-dropdown";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/custom-dropdown";
 import { useCartStore } from "@/lib/zustand/useCartStore";
 import { api } from "@/lib/orpc";
 import { toast } from "@/components/ui/custom-toast";
@@ -56,9 +56,9 @@ export default function Cart() {
           )}
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-96 p-0 bg-background border-border rounded-none" align="end">
+      <DropdownMenuContent className="w-[calc(100vw-32px)] sm:w-96 p-0 bg-background border-border rounded-none" align="end" sideOffset={8}>
         {/* Header */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border-border">
+        <div className="flex items-center justify-between px-3 md:px-4 py-2 md:py-3 border-b border-border">
           <h3 className="text-sm font-medium uppercase tracking-wider text-foreground">Cart ({itemCount})</h3>
           {items.length > 0 && (
             <button onClick={clearCart} className="text-[10px] text-[#9A9A9A] hover:text-foreground transition-colors cursor-pointer uppercase tracking-wider">Clear All</button>
@@ -66,19 +66,19 @@ export default function Cart() {
         </div>
 
         {items.length === 0 ? (
-          <div className="py-16 text-center px-4">
+          <div className="py-12 md:py-16 text-center px-4">
             <FiShoppingCart className="w-8 h-8 mx-auto text-[#9A9A9A] mb-3" />
             <p className="text-[#9A9A9A] text-sm">Your cart is empty</p>
           </div>
         ) : (
           <>
             {/* Items */}
-            <div className="max-h-80 overflow-y-auto">
+            <div className="max-h-60 md:max-h-80 overflow-y-auto">
               {items.map((item, index) => (
-                <div key={item.id} className={`px-4 py-4 ${index !== items.length - 1 ? 'border-b border-border' : ''}`}>
+                <div key={item.id} className={`px-3 md:px-4 py-3 md:py-4 ${index !== items.length - 1 ? 'border-b border-border' : ''}`}>
                   <div className="flex gap-3">
                     {/* Product Image */}
-                    <div className="w-20 h-20 relative overflow-hidden bg-secondary/30 shrink-0">
+                    <div className="w-16 h-16 md:w-20 md:h-20 relative overflow-hidden bg-secondary/30 shrink-0">
                       {item.assets[0]?.url ? (
                         <Image src={item.assets[0].url} alt={item.title} fill className="object-cover" />
                       ) : (
@@ -89,8 +89,8 @@ export default function Cart() {
                     {/* Product Info */}
                     <div className="flex-1 min-w-0 flex flex-col justify-between">
                       <div>
-                        <h4 className="font-medium text-xs truncate uppercase tracking-wide text-foreground">{item.title}</h4>
-                        <p className="text-xs text-[#9A9A9A] mt-0.5">{item.price}</p>
+                        <h4 className="font-medium text-[10px] md:text-xs truncate uppercase tracking-wide text-foreground">{item.title}</h4>
+                        <p className="text-[10px] md:text-xs text-[#9A9A9A] mt-0.5">{item.price}</p>
                       </div>
 
                       {/* Quantity Controls */}
@@ -124,7 +124,7 @@ export default function Cart() {
             </div>
 
             {/* Footer */}
-            <div className="border-t border-border px-4 py-4">
+            <div className="border-t border-border px-3 md:px-4 py-3 md:py-4">
               <div className="flex items-center justify-between mb-3">
                 <span className="text-xs uppercase tracking-wider font-medium text-foreground">Total</span>
                 <span className="font-medium text-base text-foreground">R{total.toFixed(2)}</span>

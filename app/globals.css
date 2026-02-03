@@ -1,5 +1,6 @@
 @import "tw-animate-css";
 @import "tailwindcss";
+@source "../node_modules/streamdown/dist/index.js";
 
 :root {
     --main: #811A21;

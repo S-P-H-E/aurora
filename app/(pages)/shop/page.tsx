@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { z } from "zod";
 import { ProductsResponseSchema } from "@/lib/products";
+import { CollectionsResponseSchema } from "@/lib/collections";
 import { LuSearch, LuChevronDown, LuArrowUpDown, LuX } from "react-icons/lu";
 import { FiShoppingCart } from "react-icons/fi";
 import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
@@ -21,6 +22,7 @@ import gsap from "gsap";
 import Cart from "@/components/cart";
 
 type Product = z.infer<typeof ProductsResponseSchema>[number];
+type Collection = z.infer<typeof CollectionsResponseSchema>[number];
 
 type PriceRange = "all" | "0-150" | "150-300" | "300-500";
 type SortOption = "default" | "price-asc" | "price-desc" | "name-asc" | "name-desc";
@@ -48,10 +50,12 @@ const getNumericPrice = (priceStr: string): number => {
 export default function Shop() {
   const { addItem } = useCartStore();
   const [products, setProducts] = useState<Product[]>([]);
+  const [collections, setCollections] = useState<Collection[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useQueryState("q", parseAsString.withDefault(""));
   const [priceRangeParam, setPriceRangeParam] = useQueryState("price", parseAsString.withDefault(""));
   const [sortParam, setSortParam] = useQueryState("sort", parseAsString.withDefault(""));
+  const [collectionParam, setCollectionParam] = useQueryState("collection", parseAsString.withDefault(""));
   const gridRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
 
@@ -72,7 +76,15 @@ export default function Shop() {
       setProducts(data);
       setLoading(false);
     });
+    api.collections().then((data) => {
+      setCollections(data);
+    });
   }, []);
+
+  const selectedCollection = useMemo(() => {
+    if (!collectionParam) return null;
+    return collections.find((collection) => collection.handle === collectionParam) || null;
+  }, [collectionParam, collections]);
 
   // Filter and sort products
   const filteredProducts = useMemo(() => {
@@ -88,6 +100,13 @@ export default function Shop() {
           if (!matchesSearch) {
             return false;
           }
+        }
+        // Collection filter
+        if (collectionParam) {
+          const inCollection = product.collections?.some(
+            (collection) => collection.handle === collectionParam
+          );
+          if (!inCollection) return false;
         }
         // Price filter
         if (priceRange !== "all") {
@@ -112,7 +131,7 @@ export default function Shop() {
             return 0;
         }
       });
-  }, [products, searchQuery, priceRange, sortBy]);
+  }, [products, searchQuery, priceRange, sortBy, collectionParam]);
 
   // Animate hero on mount
   useEffect(() => {
@@ -161,9 +180,10 @@ export default function Shop() {
     setSearchQuery(null);
     setPriceRange("all");
     setSortBy("default");
+    setCollectionParam(null);
   };
 
-  const hasActiveFilters = searchQuery || priceRange !== "all" || sortBy !== "default";
+  const hasActiveFilters = searchQuery || priceRange !== "all" || sortBy !== "default" || collectionParam;
 
   if (loading) {
     return <ShopSkeleton />;
@@ -201,7 +221,7 @@ export default function Shop() {
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
           <div className="space-y-3">
             <p className="hero-animate text-[10px] font-medium text-[#9A9A9A] tracking-widest uppercase">
-              [Collection]
+              {selectedCollection ? selectedCollection.title : "[Collection]"}
             </p>
             <h1 className="hero-animate text-4xl md:text-5xl lg:text-6xl font-medium leading-tight">
               Our Crystal
@@ -210,8 +230,9 @@ export default function Shop() {
             </h1>
           </div>
           <p className="hero-animate text-sm text-[#9A9A9A] max-w-md lg:text-right">
-            Explore our curated selection of natural crystals, each chosen for
-            its unique energy, clarity, and timeless beauty.
+            {selectedCollection?.description?.length
+              ? selectedCollection.description
+              : "Explore our curated selection of natural crystals, each chosen for its unique energy, clarity, and timeless beauty."}
           </p>
         </div>
       </div>
@@ -219,7 +240,7 @@ export default function Shop() {
       {/* Filters Bar */}
       <div className="sticky top-[65px] z-40 bg-background border-y border-border">
         <div className="px-4 md:px-15 py-3">
-          <div className="flex flex-col gap-3 md:gap-0 lg:flex-row lg:items-center">
+          <div className="flex flex-col gap-3 md:gap-3 lg:flex-row lg:items-center lg:gap-3">
             {/* Search Input */}
             <div className="flex-1 max-w-sm">
               <div className="relative">
@@ -229,7 +250,7 @@ export default function Shop() {
                   placeholder="Search..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-3 py-2 border border-border bg-transparent placeholder:text-[#9A9A9A] text-sm outline-none focus:border-foreground transition-colors"
+                  className="w-full pl-10 pr-3 py-2 border border-border bg-transparent placeholder:text-[#9A9A9A] text-xs outline-none focus:border-foreground transition-colors h-9"
                 />
                 {searchQuery && (
                   <button
@@ -243,6 +264,35 @@ export default function Shop() {
             </div>
 
             <div className="flex items-center gap-2 flex-wrap">
+              {/* Collection Filter */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="px-4 py-2 border border-border flex items-center gap-2 hover:bg-secondary transition-colors text-xs cursor-pointer">
+                    <span>
+                      {selectedCollection?.title || "All Collections"}
+                    </span>
+                    <LuChevronDown className="w-3 h-3 text-[#9A9A9A]" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="bg-background border-border rounded-none min-w-[220px]">
+                  <DropdownMenuItem
+                    onClick={() => setCollectionParam(null)}
+                    className={`text-foreground hover:bg-secondary cursor-pointer rounded-none ${!collectionParam ? "bg-secondary" : ""}`}
+                  >
+                    All Collections
+                  </DropdownMenuItem>
+                  {collections.map((collection) => (
+                    <DropdownMenuItem
+                      key={collection.id}
+                      onClick={() => setCollectionParam(collection.handle)}
+                      className={`text-foreground hover:bg-secondary cursor-pointer rounded-none ${collectionParam === collection.handle ? "bg-secondary" : ""}`}
+                    >
+                      {collection.title}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+
               {/* Price Filter */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>

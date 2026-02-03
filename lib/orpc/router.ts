@@ -1,6 +1,7 @@
 import { os } from "@orpc/server";
 import { z } from "zod";
 import { getProducts, getProductById } from "../products";
+import { getCollections } from "../collections";
 import { getAnnouncement } from "../announcement";
 import { createCheckout, CheckoutInputSchema } from "../checkout";
 
@@ -15,6 +16,19 @@ const products = os
     const data = await getProducts({
       first: input?.first,
       query: input?.query
+    });
+    return data;
+  });
+
+const collections = os
+  .input(
+    z.optional(z.object({
+      first: z.number().optional()
+    }))
+  )
+  .handler(async({ input }) => {
+    const data = await getCollections({
+      first: input?.first
     });
     return data;
   });
@@ -43,6 +57,7 @@ const checkout = os
 
 export const router = {
   products,
+  collections,
   productById,
   announcement,
   checkout

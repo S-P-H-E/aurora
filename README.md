@@ -41,3 +41,14 @@ useGSAP(() => {
 ```
 
 See `components/hero.tsx` for a working implementation.
+
+## TODO (Before Production)
+- Implement transactional email flow (e.g., Resend):
+  - On contact form submit: notify Aurora owner and send user confirmation email.
+  - On order created: handle Shopify webhook, send receipt/confirmation to user and notify Aurora owner.
+- Add Shopify webhook endpoint with signature verification and retries (order create/paid events).
+- Add error handling + user-friendly fallbacks for Shopify API failures (products/collections/checkout).
+- Add product pagination (or infinite scroll) to avoid loading all products at once.
+- Add collection-filter-aware empty states and loading states.
+- Add monitoring/alerting (error tracking and uptime checks).
+- Add basic tests for critical flows (products fetch, checkout creation, webhook handling).

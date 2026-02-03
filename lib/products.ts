@@ -9,6 +9,11 @@ export const ProductSchema = z.object({
     description: z.string(),
     price: z.string(),
     soldOut: z.boolean(),
+    collections: z.array(z.object({
+      id: z.string(),
+      title: z.string(),
+      handle: z.string()
+    })),
     assets: z.array(z.object({
       id: z.string().optional(),
       url: z.string(),
@@ -49,6 +54,15 @@ const PRODUCTS_QUERY = `query Products($first: Int!, $query: String) {
               }
             }
           }
+          collections(first: 10) {
+            edges {
+              node {
+                id
+                title
+                handle
+              }
+            }
+          }
         }
       }
     }
@@ -80,6 +94,15 @@ const PRODUCT_BY_ID_QUERY = `query ProductById($id: ID!) {
             id
             url
             altText
+          }
+        }
+      }
+      collections(first: 10) {
+        edges {
+          node {
+            id
+            title
+            handle
           }
         }
       }
@@ -117,6 +140,11 @@ export async function getProducts({ first = 250, query }: { first?: number; quer
         description: node.description || '',
         price: `${node.priceRange?.minVariantPrice?.amount} ${node.priceRange?.minVariantPrice?.currencyCode}`,
         soldOut: !(variant?.availableForSale ?? node.availableForSale ?? true),
+        collections: node.collections?.edges?.map((collectionEdge: any) => ({
+          id: collectionEdge.node.id,
+          title: collectionEdge.node.title,
+          handle: collectionEdge.node.handle
+        })) || [],
         assets: node.images?.edges?.map((imgEdge: any) => ({
           id: imgEdge.node.id,
           url: imgEdge.node.url,
@@ -152,6 +180,11 @@ export async function getProductById(numericId: number) {
       description: node.description || '',
       price: `${node.priceRange?.minVariantPrice?.amount} ${node.priceRange?.minVariantPrice?.currencyCode}`,
       soldOut: !(variant?.availableForSale ?? node.availableForSale ?? true),
+      collections: node.collections?.edges?.map((collectionEdge: any) => ({
+        id: collectionEdge.node.id,
+        title: collectionEdge.node.title,
+        handle: collectionEdge.node.handle
+      })) || [],
       assets: node.images?.edges?.map((imgEdge: any) => ({
         id: imgEdge.node.id,
         url: imgEdge.node.url,

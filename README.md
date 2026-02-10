@@ -5,6 +5,12 @@ It consists of:
 - A Next.js frontend
 - An oRPC backend API 
 
+## Environment Variables
+
+- `SHOPIFY_TOKEN`: Storefront API access token.
+- `SHOPIFY_DOMAIN`: Shopify Storefront API domain (usually your `*.myshopify.com` domain).
+- `SHOPIFY_CHECKOUT_DOMAIN` (optional): Forces checkout/cart redirect host. Use this when your app and Shopify storefront domain overlap and checkout redirects resolve to the wrong server.
+
 ## Important Things to Note for Devs
 
 ### Lenis + GSAP ScrollTrigger Initialization

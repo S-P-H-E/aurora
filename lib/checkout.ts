@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { env } from "./env/server";
 import { shopifyFetch } from "./shopifyFetch";
 
 export const CheckoutLineItemSchema = z.object({
@@ -27,7 +28,28 @@ const CART_CREATE_MUTATION = `
   }
 `;
 
-export async function createCheckout(input: z.infer<typeof CheckoutInputSchema>) {
+function normalizeCheckoutUrl(rawUrl: string) {
+  const checkoutDomain =
+    env.SHOPIFY_CHECKOUT_DOMAIN ||
+    (env.SHOPIFY_DOMAIN.endsWith(".myshopify.com")
+      ? env.SHOPIFY_DOMAIN
+      : undefined);
+
+  const url = rawUrl.startsWith("http")
+    ? new URL(rawUrl)
+    : new URL(rawUrl, `https://${checkoutDomain || env.SHOPIFY_DOMAIN}`);
+
+  if (checkoutDomain && url.hostname !== checkoutDomain) {
+    url.hostname = checkoutDomain;
+    url.protocol = "https:";
+  }
+
+  return url.toString();
+}
+
+export async function createCheckout(
+  input: z.infer<typeof CheckoutInputSchema>,
+) {
   const res = await shopifyFetch({
     query: CART_CREATE_MUTATION,
     variables: {
@@ -49,7 +71,7 @@ export async function createCheckout(input: z.infer<typeof CheckoutInputSchema>)
   }
 
   const cartData = res.body?.data?.cartCreate;
-  
+
   if (cartData?.userErrors?.length > 0) {
     const error = cartData.userErrors[0];
     throw new Error(error.message || "Failed to create cart");
@@ -61,6 +83,6 @@ export async function createCheckout(input: z.infer<typeof CheckoutInputSchema>)
 
   return {
     checkoutId: cartData.cart.id as string,
-    checkoutUrl: cartData.cart.checkoutUrl as string,
+    checkoutUrl: normalizeCheckoutUrl(cartData.cart.checkoutUrl as string),
   };
 }
